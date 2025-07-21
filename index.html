@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CBC Grade Assessor - School System Dashboard</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        /* Custom styles for dark mode */
+        html.dark {
+            background-color: #1a202c; /* Dark background */
+            color: #e2e8f0; /* Light text */
+        }
+        html.dark .bg-gradient-to-br {
+            background-image: linear-gradient(to bottom right, #2d3748, #1a202c);
+        }
+        html.dark .bg-white {
+            background-color: #2d3748;
+            color: #e2e8f0;
+        }
+        html.dark .shadow-2xl {
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+        html.dark .border-gray-200 {
+            border-color: #4a5568;
+        }
+        html.dark .text-gray-800 {
+            color: #e2e8f0;
+        }
+        html.dark .text-gray-600 {
+            color: #cbd5e0;
+        }
+        html.dark .text-gray-700 {
+            color: #cbd5e0;
+        }
+        html.dark .bg-gray-50 {
+            background-color: #2d3748;
+        }
+        html.dark .border-gray-300 {
+            border-color: #4a5568;
+        }
+        html.dark input {
+            background-color: #4a5568;
+            color: #e2e8f0;
+            border-color: #6b7280;
+        }
+        html.dark input::placeholder {
+            color: #a0aec0;
+        }
+        html.dark .bg-blue-50 {
+            background-color: #3182ce20; /* A lighter blue for dark mode */
+            border-color: #3182ce50;
+        }
+        html.dark .text-blue-800 {
+            color: #90cdf4;
+        }
+        html.dark .text-blue-500 {
+            color: #63b3ed;
+        }
+        html.dark .bg-gray-100 {
+            background-color: #4a5568;
+        }
+        html.dark .text-gray-500 {
+            color: #a0aec0;
+        }
+        html.dark .border-blue-200 {
+            border-color: #63b3ed50;
+        }
+        html.dark .border-blue-100 {
+            border-color: #63b3ed30;
+        }
+        html.dark .bg-gray-200 {
+            background-color: #4a5568;
+        }
+        html.dark .bg-blue-700 {
+            background-color: #3182ce;
+        }
+        html.dark .bg-blue-600 {
+            background-color: #4299e1;
+        }
+        html.dark .bg-gradient-to-r {
+            background-image: linear-gradient(to right, #4299e1, #667eea);
+        }
+        html.dark .hover\:from-blue-700 {
+            --tw-gradient-from: #3182ce;
+            --tw-gradient-to: #3182ce;
+            --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+        }
+        html.dark .hover\:to-indigo-800 {
+            --tw-gradient-to: #434190;
+        }
+        html.dark .shadow-inner {
+            box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.3);
+        }
+        html.dark .shadow-md {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.15);
+        }
+        html.dark .shadow-lg {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.15);
+        }
+        html.dark .shadow-xl {
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.15);
+        }
+        html.dark .shadow-2xl {
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+        }
+        html.dark .bg-gray-900 {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        html.dark ::-webkit-scrollbar-track {
+            background: #2d3748;
+        }
+        html.dark ::-webkit-scrollbar-thumb {
+            background: #6b7280;
+        }
+        html.dark ::-webkit-scrollbar-thumb:hover {
+            background: #a0aec0;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4 flex flex-col items-center justify-center transition-colors duration-300">
+
+    <!-- Custom Modal Component -->
+    <div id="customModal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 p-4 hidden">
+        <div class="bg-white p-6 rounded-xl shadow-2xl max-w-sm w-full text-center border border-gray-200">
+            <h3 id="modalTitle" class="text-xl font-bold text-gray-800 mb-4">Notification</h3>
+            <p id="modalMessage" class="text-gray-700 mb-6"></p>
+            <button id="modalCloseBtn" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 shadow-md">
+                Close
+            </button>
+        </div>
+    </div>
+
+    <div class="w-full max-w-6xl mx-auto bg-white rounded-xl shadow-2xl border border-gray-200 my-8 overflow-hidden">
+        <!-- Header Section -->
+        <header class="bg-blue-700 text-white p-6 flex justify-between items-center rounded-t-xl">
+            <h1 class="text-3xl font-extrabold tracking-tight">
+                <span class="text-blue-200">CBC</span> Dashboard
+            </h1>
+            <div class="flex items-center space-x-4">
+                <div id="userIdDisplay" class="text-sm bg-blue-600 px-4 py-2 rounded-full flex items-center shadow-inner">
+                    <span class="mr-2 opacity-80">User ID:</span>
+                    <span class="font-mono text-blue-100">Loading...</span>
+                </div>
+                <button id="darkModeToggle" class="p-2 rounded-full bg-blue-600 hover:bg-blue-500 transition duration-300 ease-in-out shadow-md" title="Toggle Dark Mode">
+                    <!-- Moon icon for light mode, Sun icon for dark mode -->
+                    <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path id="darkModeIcon" stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9 9 0 008.354-5.646z" />
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Dashboard Content -->
+        <main class="p-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Performance Summary Card -->
+            <div class="bg-white rounded-xl shadow-lg border border-gray-100 p-6 flex flex-col justify-between">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 mr-2 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                    Overall Performance
+                </h2>
+                <div id="performanceSummary" class="flex flex-col items-center justify-center flex-grow">
+                    <p class="text-center text-gray-500 text-lg flex-grow flex items-center justify-center">
+                        Enter grades to see performance.
+                    </p>
+                </div>
+                <button id="updateGradesBtn" class="mt-6 w-full bg-blue-500 text-white py-2 px-4 rounded-lg text-md font-semibold hover:bg-blue-600 transition duration-300 ease-in-out shadow-md">
+                    Update Grades
+                </button>
+            </div>
+
+            <!-- Subject Breakdown Chart -->
+            <div class="bg-white rounded-xl shadow-lg border border-gray-100 p-6 lg:col-span-2">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 mr-2 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 5h18M4 9h16a1 1 0 011 1v10a1 1 0 01-1 1H4a1 1 0 01-1-1V10a1 1 0 011-1z" />
+                    </svg>
+                    Subject Performance Breakdown
+                </h2>
+                <div id="subjectBarChart" class="space-y-4">
+                    <p class="text-center text-gray-500 text-lg">
+                        No subject data available. Enter grades to view.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Course Recommendations -->
+            <div class="bg-white rounded-xl shadow-lg border border-gray-100 p-6 lg:col-span-3">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 mr-2 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                    </svg>
+                    Course & Career Recommendations
+                </h2>
+                <ul id="recommendationsList" class="list-disc list-inside text-gray-700 space-y-2">
+                    <p class="text-center text-gray-500 text-lg">
+                        Recommendations will appear here after grade assessment.
+                    </p>
+                </ul>
+            </div>
+        </main>
+
+        <!-- Grade Input Form Section -->
+        <section id="gradeFormSection" class="p-8 bg-gray-50 border-t border-gray-200">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mr-3 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+                Enter Your Grades
+            </h2>
+            <p class="text-center text-gray-600 mb-8 text-md">
+                Input grades from 1 (Needs Improvement) to 5 (Excellent) for each subject.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                <div class="col-span-full">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-3 border-b border-blue-100 pb-2">Core Subjects</h3>
+                </div>
+                <div class="flex flex-col">
+                    <label for="english" class="text-gray-700 text-sm font-medium mb-1 capitalize">English:</label>
+                    <input type="number" id="english" name="english" min="1" max="5" placeholder="1-5" class="p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:border-transparent transition duration-200 ease-in-out shadow-sm text-center text-lg font-semibold" />
+                </div>
+                <div class="flex flex-col">
+                    <label for="kiswahili" class="text-gray-700 text-sm font-medium mb-1 capitalize">Kiswahili:</label>
+                    <input type="number" id="kiswahili" name="kiswahili" min="1" max="5" placeholder="1-5" class="p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:border-transparent transition duration-200 ease-in-out shadow-sm text-center text-lg font-semibold" />
+                </div>
+                <div class="flex flex-col">
+                    <label for="mathematics" class="text-gray-700 text-sm font-medium mb-1 capitalize">Mathematics:</label>
+                    <input type="number" id="mathematics" name="mathematics" min="1" max="5" placeholder="1-5" class="p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:border-transparent transition duration-200 ease-in-out shadow-sm text-center text-lg font-semibold" />
+                </div>
+                <div class="flex flex-col">
+                    <label for="science" class="text-gray-700 text-sm font-medium mb-1 capitalize">Science:</label>
+                    <input type="number" id="science" name="science" min="1" max="5" placeholder="1-5" class="p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:border-transparent transition duration-200 ease-in-out shadow-sm text-center text-lg font-semibold" />
+                </div>
+                <div class="flex flex-col">
+                    <label for="socialStudies" class="text-gray-700 text-sm font-medium mb-1 capitalize">Social Studies:</label>
+                    <input type="number" id="socialStudies" name="socialStudies" min="1" max="5" placeholder="1-5" class="p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:border-transparent transition duration-200 ease-in-out shadow-sm text-center text-lg font-semibold" />
+                </div>
+                <div class="flex flex-col">
+                    <label for="creIreHre" class="text-gray-700 text-sm font-medium mb-1 capitalize">CRE/IRE/HRE:</label>
+                    <input type="number" id="creIreHre" name="creIreHre" min="1" max="5" placeholder="1-5" class="p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:border-transparent transition duration-200 ease-in-out shadow-sm text-center text-lg font-semibold" />
+                </div>
+
+                <div class="col-span-full mt-4">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-3 border-b border-blue-100 pb-2">Optional Subjects</h3>
+                </div>
+                <div class="flex flex-col">
+                    <label for="agriculture" class="text-gray-700 text-sm font-medium mb-1 capitalize">Agriculture:</label>
+                    <input type="number" id="agriculture" name="agriculture" min="1" max="5" placeholder="1-5 (optional)" class="p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:border-transparent transition duration-200 ease-in-out shadow-sm text-center text-lg font-semibold" />
+                </div>
+                <div class="flex flex-col">
+                    <label for="businessStudies" class="text-gray-700 text-sm font-medium mb-1 capitalize">Business Studies:</label>
+                    <input type="number" id="businessStudies" name="businessStudies" min="1" max="5" placeholder="1-5 (optional)" class="p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:border-transparent transition duration-200 ease-in-out shadow-sm text-center text-lg font-semibold" />
+                </div>
+                <div class="flex flex-col">
+                    <label for="computerStudies" class="text-gray-700 text-sm font-medium mb-1 capitalize">Computer Studies:</label>
+                    <input type="number" id="computerStudies" name="computerStudies" min="1" max="5" placeholder="1-5 (optional)" class="p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:border-transparent transition duration-200 ease-in-out shadow-sm text-center text-lg font-semibold" />
+                </div>
+                <div class="flex flex-col">
+                    <label for="homeScience" class="text-gray-700 text-sm font-medium mb-1 capitalize">Home Science:</label>
+                    <input type="number" id="homeScience" name="homeScience" min="1" max="5" placeholder="1-5 (optional)" class="p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:border-transparent transition duration-200 ease-in-out shadow-sm text-center text-lg font-semibold" />
+                </div>
+                <div class="flex flex-col">
+                    <label for="artDesign" class="text-gray-700 text-sm font-medium mb-1 capitalize">Art & Design:</label>
+                    <input type="number" id="artDesign" name="artDesign" min="1" max="5" placeholder="1-5 (optional)" class="p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:border-transparent transition duration-200 ease-in-out shadow-sm text-center text-lg font-semibold" />
+                </div>
+                <div class="flex flex-col">
+                    <label for="performingArts" class="text-gray-700 text-sm font-medium mb-1 capitalize">Performing Arts:</label>
+                    <input type="number" id="performingArts" name="performingArts" min="1" max="5" placeholder="1-5 (optional)" class="p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:border-transparent transition duration-200 ease-in-out shadow-sm text-center text-lg font-semibold" />
+                </div>
+                <div class="flex flex-col">
+                    <label for="sports" class="text-gray-700 text-sm font-medium mb-1 capitalize">Sports:</label>
+                    <input type="number" id="sports" name="sports" min="1" max="5" placeholder="1-5 (optional)" class="p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:border-transparent transition duration-200 ease-in-out shadow-sm text-center text-lg font-semibold" />
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-4">
+                <button id="assessGradesBtn" class="flex-1 bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-4 px-6 rounded-lg text-xl font-bold hover:from-blue-700 hover:to-indigo-800 transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300 shadow-xl">
+                    Assess Grades & Update Dashboard
+                </button>
+                <button id="clearFormBtn" class="flex-none bg-gray-300 text-gray-800 py-4 px-6 rounded-lg text-xl font-bold hover:bg-gray-400 transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-gray-400 shadow-lg">
+                    Clear Form
+                </button>
+            </div>
+            <button id="printReportBtn" class="mt-4 w-full bg-green-500 text-white py-3 px-6 rounded-lg text-lg font-semibold hover:bg-green-600 transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-green-300 shadow-lg">
+                Print Report
+            </button>
+        </section>
+
+        <!-- Historical Assessments Section -->
+        <section class="p-8 bg-gray-100 border-t border-gray-200">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mr-3 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h.01M7 16h.01M17 16h.01M6 12h.01M10 12h.01M14 12h.01M18 12h.01M6 21h12a2 2 0 002-2V7a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                Historical Assessments
+            </h2>
+            <div id="historicalAssessmentsList" class="space-y-4 max-h-96 overflow-y-auto pr-2">
+                <p class="text-center text-gray-500 text-lg">
+                    No past assessments found.
+                </p>
+            </div>
+        </section>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, collection, query, orderBy, getDocs, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Global variables for Firebase instances
+        let app;
+        let db;
+        let auth;
+        let userId = null;
+        let isAuthReady = false;
+
+        // Environment variables provided by Canvas
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+        // Initialize Firebase
+        try {
+            app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            auth = getAuth(app);
+        } catch (error) {
+            console.error("Firebase initialization error:", error);
+            showModal("Firebase failed to initialize. Some features may not work.", "Initialization Error");
+        }
+
+        // Authentication State Listener
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                userId = user.uid;
+                document.getElementById('userIdDisplay').innerHTML = `<span class="mr-2 opacity-80">User ID:</span><span class="font-mono text-blue-100">${userId.substring(0, 8)}...</span>`;
+            } else {
+                try {
+                    if (initialAuthToken) {
+                        await signInWithCustomToken(auth, initialAuthToken);
+                    } else {
+                        await signInAnonymously(auth);
+                    }
+                    userId = auth.currentUser?.uid || crypto.randomUUID();
+                    document.getElementById('userIdDisplay').innerHTML = `<span class="mr-2 opacity-80">User ID:</span><span class="font-mono text-blue-100">${userId.substring(0, 8)}...</span>`;
+                } catch (error) {
+                    console.error("Firebase authentication error:", error);
+                    showModal("Authentication failed. Some features may not work. Please refresh.", "Authentication Error");
+                    userId = crypto.randomUUID(); // Fallback to a random ID
+                    document.getElementById('userIdDisplay').innerHTML = `<span class="mr-2 opacity-80">User ID:</span><span class="font-mono text-blue-100">${userId.substring(0, 8)}...</span>`;
+                }
+            }
+            isAuthReady = true;
+            // Once authenticated, load historical data
+            setupHistoricalAssessmentsListener();
+        });
+
+        // --- DOM Elements ---
+        const performanceSummaryEl = document.getElementById('performanceSummary');
+        const subjectBarChartEl = document.getElementById('subjectBarChart');
+        const recommendationsListEl = document.getElementById('recommendationsList');
+        const gradeFormSectionEl = document.getElementById('gradeFormSection');
+        const assessGradesBtn = document.getElementById('assessGradesBtn');
+        const clearFormBtn = document.getElementById('clearFormBtn');
+        const printReportBtn = document.getElementById('printReportBtn');
+        const updateGradesBtn = document.getElementById('updateGradesBtn');
+        const historicalAssessmentsListEl = document.getElementById('historicalAssessmentsList');
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const darkModeIcon = document.getElementById('darkModeIcon');
+
+        // Modal elements
+        const customModal = document.getElementById('customModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalMessage = document.getElementById('modalMessage');
+        const modalCloseBtn = document.getElementById('modalCloseBtn');
+
+        // --- State Variables (JavaScript objects/arrays) ---
+        let currentGrades = {
+            english: '', kiswahili: '', mathematics: '', science: '', socialStudies: '', creIreHre: '',
+            agriculture: '', businessStudies: '', computerStudies: '', homeScience: '', artDesign: '', performingArts: '', sports: '',
+        };
+        let currentAssessmentResult = null;
+        let currentRecommendations = [];
+        let currentSubjectChartData = [];
+        let historicalAssessments = []; // Array to store fetched historical data
+
+        // --- Constants ---
+        const ALL_SUBJECTS = [
+            { key: 'english', label: 'English' },
+            { key: 'kiswahili', label: 'Kiswahili' },
+            { key: 'mathematics', label: 'Mathematics' },
+            { key: 'science', label: 'Science' },
+            { key: 'socialStudies', label: 'Social Studies' },
+            { key: 'creIreHre', label: 'CRE/IRE/HRE' },
+            { key: 'agriculture', label: 'Agriculture' },
+            { key: 'businessStudies', label: 'Business Studies' },
+            { key: 'computerStudies', label: 'Computer Studies' },
+            { key: 'homeScience', label: 'Home Science' },
+            { key: 'artDesign', label: 'Art & Design' },
+            { key: 'performingArts', label: 'Performing Arts' },
+            { key: 'sports', label: 'Sports' },
+        ];
+
+        // --- Helper Functions ---
+
+        /**
+         * Shows a custom modal with a message and title.
+         * @param {string} message - The message to display.
+         * @param {string} title - The title of the modal.
+         */
+        function showModal(message, title = "Notification") {
+            modalTitle.textContent = title;
+            modalMessage.textContent = message;
+            customModal.classList.remove('hidden');
+        }
+
+        /**
+         * Hides the custom modal.
+         */
+        function hideModal() {
+            customModal.classList.add('hidden');
+        }
+
+        /**
+         * Converts a grade string to a numerical value.
+         * @param {string} grade - The grade string.
+         * @returns {number} The numerical grade (0 if invalid).
+         */
+        function getNumericalGrade(grade) {
+            const num = parseInt(grade, 10);
+            return isNaN(num) ? 0 : num;
+        }
+
+        /**
+         * Renders the overall performance summary on the dashboard.
+         */
+        function renderPerformanceSummary() {
+            if (currentAssessmentResult) {
+                const performanceLevelClass =
+                    currentAssessmentResult.performanceLevel === 'Excellent' ? 'text-green-600' :
+                    currentAssessmentResult.performanceLevel === 'Very Good' ? 'text-lime-600' :
+                    currentAssessmentResult.performanceLevel === 'Good' ? 'text-yellow-600' :
+                    currentAssessmentResult.performanceLevel === 'Average' ? 'text-orange-600' :
+                    'text-red-600';
+
+                performanceSummaryEl.innerHTML = `
+                    <div class="text-5xl font-extrabold mb-2 ${performanceLevelClass}">
+                        ${currentAssessmentResult.performanceLevel}
+                    </div>
+                    <p class="text-xl text-gray-600">
+                        Average Score: <span class="font-bold">${currentAssessmentResult.averageScore}</span> / 5
+                    </p>
+                `;
+            } else {
+                performanceSummaryEl.innerHTML = `
+                    <p class="text-center text-gray-500 text-lg flex-grow flex items-center justify-center">
+                        Enter grades to see performance.
+                    </p>
+                `;
+            }
+        }
+
+        /**
+         * Renders the subject performance breakdown bar chart.
+         * @param {Array<Object>} data - Array of subject data {name, grade}.
+         */
+        function renderSubjectBarChart(data) {
+            subjectBarChartEl.innerHTML = ''; // Clear previous chart
+            if (!data || data.length === 0) {
+                subjectBarChartEl.innerHTML = `<p class="text-center text-gray-500 text-lg">No subject data available. Enter grades to view.</p>`;
+                return;
+            }
+
+            const maxGrade = 5;
+            data.forEach(item => {
+                const barContainer = document.createElement('div');
+                barContainer.className = 'flex items-center';
+                barContainer.innerHTML = `
+                    <div class="w-28 text-right pr-4 text-gray-700 font-medium text-sm">
+                        ${item.name}
+                    </div>
+                    <div class="flex-1 bg-gray-200 rounded-full h-6 relative overflow-hidden">
+                        <div
+                            class="bg-blue-500 h-full rounded-full transition-all duration-500 ease-out"
+                            style="width: ${(item.grade / maxGrade) * 100}%"
+                        ></div>
+                        <span class="absolute inset-0 flex items-center justify-center text-white text-xs font-bold">
+                            ${item.grade}
+                        </span>
+                    </div>
+                `;
+                subjectBarChartEl.appendChild(barContainer);
+            });
+        }
+
+        /**
+         * Renders the course and career recommendations.
+         * @param {Array<string>} recommendations - Array of recommendation strings.
+         */
+        function renderRecommendations(recommendations) {
+            recommendationsListEl.innerHTML = ''; // Clear previous recommendations
+            if (!recommendations || recommendations.length === 0) {
+                recommendationsListEl.innerHTML = `<p class="text-center text-gray-500 text-lg">Recommendations will appear here after grade assessment.</p>`;
+                return;
+            }
+
+            recommendations.forEach(rec => {
+                const listItem = document.createElement('li');
+                listItem.className = 'flex items-start';
+                listItem.innerHTML = `<span class="mr-2 text-blue-500">&#x2022;</span> ${rec}`;
+                recommendationsListEl.appendChild(listItem);
+            });
+        }
+
+        /**
+         * Populates the grade input form with given grades.
+         * @param {Object} gradesData - Object containing subject grades.
+         */
+        function populateForm(gradesData) {
+            ALL_SUBJECTS.forEach(subject => {
+                const input = document.getElementById(subject.key);
+                if (input) {
+                    input.value = gradesData[subject.key] || '';
+                }
+            });
+            currentGrades = { ...gradesData }; // Update current grades state
+        }
+
+        /**
+         * Clears all grade input fields and resets dashboard.
+         */
+        function clearForm() {
+            ALL_SUBJECTS.forEach(subject => {
+                const input = document.getElementById(subject.key);
+                if (input) {
+                    input.value = '';
+                }
+            });
+            currentGrades = {
+                english: '', kiswahili: '', mathematics: '', science: '', socialStudies: '', creIreHre: '',
+                agriculture: '', businessStudies: '', computerStudies: '', homeScience: '', artDesign: '', performingArts: '', sports: '',
+            };
+            currentAssessmentResult = null;
+            currentRecommendations = [];
+            currentSubjectChartData = [];
+            renderPerformanceSummary();
+            renderSubjectBarChart([]);
+            renderRecommendations([]);
+        }
+
+        /**
+         * Handles changes in grade input fields.
+         * @param {Event} e - The input change event.
+         */
+        function handleGradeChange(e) {
+            const { name, value } = e.target;
+            if (value === '' || (/^[1-5]$/.test(value))) {
+                currentGrades[name] = value;
+            } else {
+                showModal("Please enter a grade between 1 and 5.", "Invalid Input");
+                e.target.value = currentGrades[name]; // Revert to last valid value
+            }
+        }
+
+        /**
+         * Assesses grades, updates dashboard, and saves assessment.
+         */
+        async function assessGrades() {
+            if (!isAuthReady) {
+                showModal("Authentication is not ready. Please wait a moment and try again.", "Authentication Pending");
+                return;
+            }
+
+            let totalScore = 0;
+            let subjectCount = 0;
+            const subjectStrengths = {};
+            const subjectDataForChart = [];
+
+            ALL_SUBJECTS.forEach(subject => {
+                const grade = getNumericalGrade(currentGrades[subject.key]);
+                if (grade > 0) {
+                    totalScore += grade;
+                    subjectCount++;
+                    subjectStrengths[subject.key] = grade;
+                    subjectDataForChart.push({ name: subject.label, grade: grade });
+                }
+            });
+
+            if (subjectCount === 0) {
+                showModal("Please enter grades for at least one subject to assess.", "No Grades Entered");
+                return;
+            }
+
+            const averageScore = totalScore / subjectCount;
+            let performanceLevel = '';
+
+            if (averageScore >= 4.5) {
+                performanceLevel = 'Excellent';
+            } else if (averageScore >= 3.5) {
+                performanceLevel = 'Very Good';
+            } else if (averageScore >= 2.5) {
+                performanceLevel = 'Good';
+            } else if (averageScore >= 1.5) {
+                performanceLevel = 'Average';
+            } else {
+                performanceLevel = 'Needs Improvement';
+            }
+
+            currentAssessmentResult = {
+                totalScore: totalScore,
+                averageScore: averageScore.toFixed(2),
+                performanceLevel: performanceLevel,
+            };
+            currentSubjectChartData = subjectDataForChart;
+
+            // Generate course recommendations
+            const generatedRecommendations = [];
+            if (performanceLevel === 'Excellent' || performanceLevel === 'Very Good') {
+                generatedRecommendations.push("You have shown strong academic performance!");
+                if (subjectStrengths.mathematics >= 4 && subjectStrengths.science >= 4) {
+                    generatedRecommendations.push("Consider STEM fields like Engineering, Medicine, Information Technology, or Actuarial Science.");
+                }
+                if (subjectStrengths.english >= 4 && subjectStrengths.kiswahili >= 4) {
+                    generatedRecommendations.push("Explore careers in Law, Journalism, Education, or Communication.");
+                }
+                if (subjectStrengths.businessStudies >= 4) {
+                    generatedRecommendations.push("Business-related courses such as Commerce, Finance, or Marketing could be a great fit.");
+                }
+                if (subjectStrengths.artDesign >= 4 || subjectStrengths.performingArts >= 4) {
+                    generatedRecommendations.push("Creative fields like Graphic Design, Fine Arts, Music, or Theatre are highly recommended.");
+                }
+                if (subjectStrengths.agriculture >= 4) {
+                    generatedRecommendations.push("Consider Agricultural Sciences, Environmental Science, or related fields.");
+                }
+                if (subjectStrengths.computerStudies >= 4) {
+                    generatedRecommendations.push("Look into Computer Science, Software Development, or Cybersecurity.");
+                }
+                if (subjectStrengths.sports >= 4) {
+                    generatedRecommendations.push("Explore sports management, physical education, or professional sports careers.");
+                }
+            } else if (performanceLevel === 'Good') {
+                generatedRecommendations.push("You have a solid foundation. Focus on improving your strong areas.");
+                if (subjectStrengths.mathematics >= 3 && subjectStrengths.science >= 3) {
+                    generatedRecommendations.push("Technical courses, Diploma programs in IT, or applied sciences might suit you.");
+                }
+                if (subjectStrengths.english >= 3 || subjectStrengths.kiswahili >= 3) {
+                    generatedRecommendations.push("Consider careers in customer service, hospitality, or administrative roles.");
+                }
+                if (subjectStrengths.businessStudies >= 3) {
+                    generatedRecommendations.push("Business administration, accounting technicians, or sales roles could be good options.");
+                }
+            } else {
+                generatedRecommendations.push("There's room for improvement. Focus on foundational subjects and seek extra support.");
+                generatedRecommendations.push("Consider vocational training, technical courses, or certificate programs to build practical skills.");
+            }
+            generatedRecommendations.push("Remember, these are general recommendations. It's always best to consult with career counselors, teachers, or guardians for personalized guidance.");
+            currentRecommendations = generatedRecommendations;
+
+            // Update UI
+            renderPerformanceSummary();
+            renderSubjectBarChart(currentSubjectChartData);
+            renderRecommendations(currentRecommendations);
+
+            // Save to Firestore
+            await saveAssessment();
+        }
+
+        /**
+         * Saves the current assessment to Firestore.
+         */
+        async function saveAssessment() {
+            if (!userId || !db) {
+                showModal("User not authenticated or Firestore not initialized. Cannot save assessment.", "Save Error");
+                return;
+            }
+            if (!currentAssessmentResult) {
+                showModal("No assessment data to save.", "Save Error");
+                return;
+            }
+
+            try {
+                const timestamp = new Date();
+                const assessmentId = timestamp.toISOString(); // Use ISO string as document ID for easy sorting
+                const assessmentRef = doc(db, `artifacts/${appId}/users/${userId}/assessments`, assessmentId);
+                await setDoc(assessmentRef, {
+                    grades: currentGrades,
+                    result: currentAssessmentResult,
+                    recommendations: currentRecommendations,
+                    timestamp: timestamp.getTime(), // Store timestamp as number for easier sorting/querying if needed
+                    readableTimestamp: timestamp.toLocaleString(), // Store readable format
+                });
+                console.log("Assessment saved successfully!");
+                // No need to manually re-render historical assessments, onSnapshot will handle it.
+            } catch (e) {
+                console.error("Error saving assessment to Firestore:", e);
+                showModal("Failed to save assessment data. Please check your connection.", "Save Error");
+            }
+        }
+
+        /**
+         * Sets up a real-time listener for historical assessments.
+         */
+        function setupHistoricalAssessmentsListener() {
+            if (!userId || !db) {
+                console.warn("Firestore or userId not ready for historical assessments listener.");
+                return;
+            }
+
+            const assessmentsCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/assessments`);
+            // Note: orderBy is commented out as per instructions to avoid index issues.
+            // If sorting is critical, it should be done client-side after fetching.
+            const q = query(assessmentsCollectionRef); // , orderBy("timestamp", "desc")
+
+            onSnapshot(q, (snapshot) => {
+                historicalAssessments = [];
+                snapshot.forEach((doc) => {
+                    historicalAssessments.push({ id: doc.id, ...doc.data() });
+                });
+                // Sort client-side by timestamp in descending order
+                historicalAssessments.sort((a, b) => b.timestamp - a.timestamp);
+                renderHistoricalAssessments();
+            }, (error) => {
+                console.error("Error fetching historical assessments:", error);
+                showModal("Failed to load historical assessments. Please check your connection.", "Load Error");
+            });
+        }
+
+        /**
+         * Renders the list of historical assessments.
+         */
+        function renderHistoricalAssessments() {
+            historicalAssessmentsListEl.innerHTML = ''; // Clear previous list
+
+            if (historicalAssessments.length === 0) {
+                historicalAssessmentsListEl.innerHTML = `<p class="text-center text-gray-500 text-lg">No past assessments found.</p>`;
+                return;
+            }
+
+            historicalAssessments.forEach(assessment => {
+                const listItem = document.createElement('div');
+                listItem.className = 'flex items-center justify-between bg-white p-4 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition duration-200 ease-in-out';
+                listItem.innerHTML = `
+                    <div class="flex-1 cursor-pointer" data-id="${assessment.id}">
+                        <p class="font-semibold text-gray-800">${assessment.readableTimestamp}</p>
+                        <p class="text-sm text-gray-600">Performance: <span class="font-medium ${
+                            assessment.result.performanceLevel === 'Excellent' ? 'text-green-600' :
+                            assessment.result.performanceLevel === 'Very Good' ? 'text-lime-600' :
+                            assessment.result.performanceLevel === 'Good' ? 'text-yellow-600' :
+                            assessment.result.performanceLevel === 'Average' ? 'text-orange-600' :
+                            'text-red-600'
+                        }">${assessment.result.performanceLevel}</span></p>
+                    </div>
+                    <button class="delete-btn p-2 rounded-full bg-red-100 text-red-600 hover:bg-red-200 transition duration-200" data-id="${assessment.id}" title="Delete Assessment">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                    </button>
+                `;
+                historicalAssessmentsListEl.appendChild(listItem);
+            });
+
+            // Add event listeners for loading and deleting
+            historicalAssessmentsListEl.querySelectorAll('.flex-1.cursor-pointer').forEach(item => {
+                item.addEventListener('click', (e) => loadAssessment(e.currentTarget.dataset.id));
+            });
+            historicalAssessmentsListEl.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => deleteAssessment(e.currentTarget.dataset.id));
+            });
+        }
+
+        /**
+         * Loads a specific historical assessment into the form and dashboard.
+         * @param {string} assessmentId - The ID of the assessment to load.
+         */
+        async function loadAssessment(assessmentId) {
+            const assessment = historicalAssessments.find(a => a.id === assessmentId);
+            if (assessment) {
+                populateForm(assessment.grades);
+                currentAssessmentResult = assessment.result;
+                currentRecommendations = assessment.recommendations;
+                // Reconstruct subject chart data
+                const subjectDataForChart = ALL_SUBJECTS.map(s => ({
+                    name: s.label,
+                    grade: getNumericalGrade(assessment.grades[s.key])
+                })).filter(item => item.grade > 0);
+                currentSubjectChartData = subjectDataForChart;
+
+                renderPerformanceSummary();
+                renderSubjectBarChart(currentSubjectChartData);
+                renderRecommendations(currentRecommendations);
+
+                // Scroll to the dashboard view
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                showModal("Assessment not found.", "Error");
+            }
+        }
+
+        /**
+         * Deletes a specific historical assessment from Firestore.
+         * @param {string} assessmentId - The ID of the assessment to delete.
+         */
+        async function deleteAssessment(assessmentId) {
+            if (!userId || !db) {
+                showModal("User not authenticated or Firestore not initialized. Cannot delete assessment.", "Delete Error");
+                return;
+            }
+
+            try {
+                const assessmentRef = doc(db, `artifacts/${appId}/users/${userId}/assessments`, assessmentId);
+                await deleteDoc(assessmentRef);
+                showModal("Assessment deleted successfully!", "Success");
+                // onSnapshot listener will automatically update the list.
+                // If the deleted assessment was currently displayed, clear the form.
+                if (currentAssessmentResult && currentAssessmentResult.timestamp === assessmentId) { // Check if it's the current one
+                     clearForm();
+                }
+            } catch (e) {
+                console.error("Error deleting assessment:", e);
+                showModal("Failed to delete assessment. Please try again.", "Delete Error");
+            }
+        }
+
+        /**
+         * Toggles between light and dark mode.
+         */
+        function toggleDarkMode() {
+            const htmlEl = document.documentElement;
+            if (htmlEl.classList.contains('light')) {
+                htmlEl.classList.remove('light');
+                htmlEl.classList.add('dark');
+                darkModeIcon.setAttribute('d', 'M12 3v1m0 16v1m9-9h-1M4 12H3m15.325 6.675l-.707-.707M6.707 6.707l-.707-.707m12.728 0l-.707.707M6.707 17.293l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z'); // Sun icon
+            } else {
+                htmlEl.classList.remove('dark');
+                htmlEl.classList.add('light');
+                darkModeIcon.setAttribute('d', 'M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9 9 0 008.354-5.646z'); // Moon icon
+            }
+        }
+
+        /**
+         * Triggers the browser's print functionality for the report.
+         */
+        function printReport() {
+            window.print();
+        }
+
+        // --- Event Listeners ---
+        assessGradesBtn.addEventListener('click', assessGrades);
+        clearFormBtn.addEventListener('click', clearForm);
+        printReportBtn.addEventListener('click', printReport);
+        updateGradesBtn.addEventListener('click', () => {
+            gradeFormSectionEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+        darkModeToggle.addEventListener('click', toggleDarkMode);
+        modalCloseBtn.addEventListener('click', hideModal);
+
+        // Add event listeners for grade inputs
+        ALL_SUBJECTS.forEach(subject => {
+            const input = document.getElementById(subject.key);
+            if (input) {
+                input.addEventListener('input', handleGradeChange);
+            }
+        });
+
+        // Initial render on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            clearForm(); // Initialize form and dashboard
+            // Firebase auth listener will call setupHistoricalAssessmentsListener
+        });
+    </script>
+</body>
+</html>
